@@ -1,100 +1,100 @@
 import { genFloor } from "../game/genFloor";
 import { User } from "./user";
 
-export class Room{
+export class Room {
   users: User[];
   floor: any;
   scenery: any;
-  constructor(){
-    this.users = []
-    this.floor = genFloor()
+  constructor() {
+    this.users = [];
+    this.floor = genFloor();
   }
 
-  join(user: User){
-    const newUser = new User(user)
+  join(user: User) {
+    const newUser = new User(user);
 
-    this.users.push(newUser)
+    this.users.push(newUser);
   }
 
-  leave(user: User){
-    const index = this.users.findIndex(u => u.socketId === user.socketId)
+  leave(user: User) {
+    const index = this.users.findIndex((u) => u.socketId === user.socketId);
 
-    if(index !== -1){
-      this.users.splice(index, 1)
+    if (index !== -1) {
+      this.users.splice(index, 1);
     }
   }
 
-  move(userSocketId: string, direction: string){
-    const index = this.getUsersInGame().findIndex(u => u.socketId === userSocketId)
+  move(userSocketId: string, direction: string) {
+    const user = this.users.find((u) => u.socketId === userSocketId && u.inGame);
 
-    if(index !== -1){
-      this.users[index].move(direction)
-    }
+    if (!user) return;
+
+    user.move(direction);
   }
 
   newFloor(clearFloor?: boolean) {
-    if(clearFloor){
-      this.floor = genFloor(this.floor)
+    if (clearFloor) {
+      this.floor = genFloor(this.floor);
     } else {
-      this.floor = genFloor()
+      this.floor = genFloor();
     }
   }
 
-  verifyAllUsersPosition(){
-    this.users.forEach(user => {
-      user.verifyPosition()
-    })
+  verifyAllUsersPosition() {
+    this.users.forEach((user) => {
+      if (!user.inGame) return;
+      user.verifyPosition(user);
+    });
   }
 
-  getUsersInGame(){
-    return this.users.filter(user => user.inGame)
+  getUsersInGame() {
+    return this.users.filter((user) => user.inGame);
   }
 
-  getRoomWithUsersInGame(){
-    this.verifyAllUsersPosition();
+  getRoomWithUsersInGame() {
     const room = {
       users: this.getUsersInGame(),
       floor: this.floor,
-      scenery: this.scenery
-    }
+      scenery: this.scenery,
+    };
 
-    return room
+    return room;
   }
 
-  restartGame(){
-    this.users.forEach(user => {
-      user.returnToGame()
-    })
+  restartGame() {
+    this.users.forEach((user) => {
+      user.returnToGame();
+    });
 
-    this.floor = genFloor()
+    this.floor = genFloor();
   }
 
-  userRename(newName: string, user: User){
-    const index = this.users.findIndex(u => u.socketId === user.socketId)
+  userRename(newName: string, user: User) {
+    const index = this.users.findIndex((u) => u.socketId === user.socketId);
 
-    if(index !== -1){
-      this.users[index].name = newName
-    }
-  }
-
-  userChangeAvatar(newAvatar: string, user: User){
-    const index = this.users.findIndex(u => u.socketId === user.socketId)
-
-    if(index !== -1){
-      this.users[index].avatar = newAvatar
+    if (index !== -1) {
+      this.users[index].name = newName;
     }
   }
 
-  rewardWinner(winner: User){
-    if (!winner) return
-    const index = this.users.findIndex(u => u.socketId === winner.socketId)
+  userChangeAvatar(newAvatar: string, user: User) {
+    const index = this.users.findIndex((u) => u.socketId === user.socketId);
 
-    if(index !== -1){
-      this.users[index].win()
+    if (index !== -1) {
+      this.users[index].avatar = newAvatar;
     }
   }
 
-  getUsersRank(){
-    return this.users.sort((a, b) => b.score - a.score)
+  rewardWinner(winner: User) {
+    if (!winner) return;
+    const index = this.users.findIndex((u) => u.socketId === winner.socketId);
+
+    if (index !== -1) {
+      this.users[index].win();
+    }
+  }
+
+  getUsersRank() {
+    return this.users.sort((a, b) => b.score - a.score);
   }
 }

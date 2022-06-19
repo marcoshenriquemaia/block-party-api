@@ -42,6 +42,8 @@ io.on("connection", (socket) => {
 
   socket.on("move", ({ direction }) => {
     room.move(socket.id, direction);
+    
+    room.verifyAllUsersPosition();
 
     io.to("main_room").emit("room:update", room.getRoomWithUsersInGame());
   });
@@ -69,6 +71,7 @@ const runGame = () => {
     room.rewardWinner(roomPlayersInGame.users[0]);
     room.restartGame();
     io.to("main_room").emit("room:rank", room.getUsersRank());
+    currentInterval = 0
   }
 
   io.to("main_room").emit("floor:update", room.floor);

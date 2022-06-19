@@ -31,6 +31,8 @@ export class User {
     this.inGame = false;
 
     this.move = this.move.bind(this);
+    this.setInfo = this.setInfo.bind(this);
+    this.lose = this.lose.bind(this);
   }
 
   move(direction: string) {
@@ -64,11 +66,11 @@ export class User {
 
   returnToGame() {
     this.inGame = true;
-    this.positionX = Math.floor(Math.random() * (ROOM.FLOOR_SIZE - 100));
-    this.positionY = Math.floor(Math.random() * (ROOM.FLOOR_SIZE - 100));
+    this.positionX = ROOM.FLOOR_SIZE / 2;
+    this.positionY = ROOM.FLOOR_SIZE / 2;
   }
 
-  verifyPosition() {
+  verifyPosition(user: User) {
     const playerColorPosition = room.floor.scenery.find((block) => {
       if (
         Math.floor((this.positionX + 25) / 100) * 100 === block.position.x &&
@@ -79,8 +81,9 @@ export class User {
     });
 
     if (playerColorPosition?.color === "#ffffff" || !playerColorPosition) {
-      this.lose();
+      user.lose();
     }
+
   }
 
   win(){

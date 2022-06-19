@@ -19,7 +19,6 @@ export const genFloor = (floorToRemove?: any) => {
     }
   }
 
-  const randomColorIndex = Math.floor(Math.random() * colors.length);
   const scenery = [];
 
   for (let i = 0; i < ROOM.FLOOR_SIZE; i += size) {
@@ -33,8 +32,20 @@ export const genFloor = (floorToRemove?: any) => {
     }
   }
 
-  return { color: colors[randomColorIndex], scenery };
+  const color = getExistRandomColor(scenery.map((block) => block.color));
+
+  return { color, scenery };
 };
+
+const getExistRandomColor = (randomColorList: any[]) => {
+  const randomColorIndex = Math.floor(Math.random() * colors.length);
+
+  if (!randomColorList.find((color) => color === colors[randomColorIndex])) {
+    return getExistRandomColor(randomColorList);
+  } else {
+    return colors[randomColorIndex];
+  }
+}
 
 const colors = [
   "#9c9d97",
