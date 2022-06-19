@@ -51,6 +51,7 @@ export class Room{
   }
 
   getRoomWithUsersInGame(){
+    this.verifyAllUsersPosition();
     const room = {
       users: this.getUsersInGame(),
       floor: this.floor,
@@ -82,5 +83,18 @@ export class Room{
     if(index !== -1){
       this.users[index].avatar = newAvatar
     }
+  }
+
+  rewardWinner(winner: User){
+    if (!winner) return
+    const index = this.users.findIndex(u => u.socketId === winner.socketId)
+
+    if(index !== -1){
+      this.users[index].win()
+    }
+  }
+
+  getUsersRank(){
+    return this.users.sort((a, b) => b.score - a.score)
   }
 }

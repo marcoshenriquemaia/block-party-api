@@ -2,12 +2,12 @@ import { ROOM } from "../mocks/room";
 import { room } from "../server";
 
 export interface IUser {
+  score?: number;
   socketId: string;
   name: string;
   avatar: string;
   positionX: number;
   positionY: number;
-  points?: number;
 }
 
 const speed = 5;
@@ -18,7 +18,7 @@ export class User {
   avatar: string;
   positionY: number;
   positionX: number;
-  points?: number;
+  score?: number;
   inGame: boolean;
 
   constructor(user: IUser) {
@@ -27,7 +27,7 @@ export class User {
     this.avatar = user.avatar;
     this.positionY = user.positionY;
     this.positionX = user.positionX;
-    this.points = user.points ?? 0;
+    this.score = user.score ?? 0;
     this.inGame = false;
 
     this.move = this.move.bind(this);
@@ -55,7 +55,7 @@ export class User {
     this.avatar = info.avatar;
     this.positionY = info.positionY;
     this.positionX = info.positionX;
-    this.points = 0;
+    this.score = 0;
   }
 
   lose() {
@@ -81,6 +81,10 @@ export class User {
     if (playerColorPosition?.color === "#ffffff" || !playerColorPosition) {
       this.lose();
     }
+  }
+
+  win(){
+    this.score++;
   }
 
   rename(name: string) {

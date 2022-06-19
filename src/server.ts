@@ -2,6 +2,7 @@ import { io } from "./socket";
 import { Room } from "./roomData";
 import { User } from "./roomData/user";
 import { genFloor } from "./game/genFloor";
+import { Socket } from "dgram";
 
 export const room = new Room();
 
@@ -49,7 +50,6 @@ io.on("connection", (socket) => {
 
   socket.on("user:rename", (newName) => {
     room.userRename(newName, user)
-    console.log(room.users);
     io.to("main_room").emit("room:update", room.getRoomWithUsersInGame());
   });
 
@@ -68,7 +68,9 @@ const runGame = () => {
   const roomPlayersInGame = room.getRoomWithUsersInGame();
 
   if (roomPlayersInGame.users.length <= 1) {
+    room.rewardWinner(roomPlayersInGame.users[0]);
     room.restartGame();
+    io.to("main_room").emit("room:rank", room.getUsersRank());
   }
 
   io.to("main_room").emit("floor:update", room.floor);
