@@ -76,16 +76,19 @@ const runGame = () => {
 
   io.to("main_room").emit("floor:update", room.floor);
   io.to("main_room").emit("room:update", room.getRoomWithUsersInGame());
-
+  
   currentInterval++;
 
+  io.to("main_room").emit("room:time", (intervals[currentInterval] ? intervals[currentInterval] : 2 * 1000) - 1000);
+  
   timeout = setTimeout(
     () => {
       room.newFloor(true);
       room.verifyAllUsersPosition();
       io.to("main_room").emit("floor:update", room.floor);
       io.to("main_room").emit("room:update", room.getRoomWithUsersInGame());
-
+      io.to("main_room").emit("room:time", (3 * 1000) - 1000);
+      
       timeout = setTimeout(runGame, 3 * 1000);
     },
     intervals[currentInterval] ? intervals[currentInterval] : 2 * 1000

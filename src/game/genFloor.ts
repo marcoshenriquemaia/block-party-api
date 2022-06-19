@@ -21,7 +21,7 @@ export const genFloor = (floorToRemove?: any) => {
 
   const scenery = [];
 
-  for (let i = 0; i < ROOM.FLOOR_SIZE; i += size) {
+  for (let i = 0; i < ROOM.FLOOR_WIDTH; i += size) {
     for (let j = 0; j < ROOM.FLOOR_SIZE; j += size) {
       scenery.push({
         position: { x: i, y: j },

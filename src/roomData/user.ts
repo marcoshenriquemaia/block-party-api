@@ -66,7 +66,7 @@ export class User {
 
   returnToGame() {
     this.inGame = true;
-    this.positionX = ROOM.FLOOR_SIZE / 2;
+    this.positionX = ROOM.FLOOR_WIDTH / 2;
     this.positionY = ROOM.FLOOR_SIZE / 2;
   }
 
