@@ -9,4 +9,4 @@ export const io = new Server(server, {
     }
 })
 
-server.listen(3333, () => console.log('Server started on port 3333'))
+server.listen(3334, () => console.log('Server started on port 3333'))
