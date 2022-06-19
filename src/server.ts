@@ -1,8 +1,6 @@
 import { io } from "./socket";
 import { Room } from "./roomData";
 import { User } from "./roomData/user";
-import { genFloor } from "./game/genFloor";
-import { Socket } from "dgram";
 
 export const room = new Room();
 
@@ -43,7 +41,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("move", ({ direction }) => {
-    room.move(user, direction);
+    room.move(socket.id, direction);
 
     io.to("main_room").emit("room:update", room.getRoomWithUsersInGame());
   });

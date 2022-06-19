@@ -24,8 +24,8 @@ export class Room{
     }
   }
 
-  move(user: User, direction: string){
-    const index = this.getUsersInGame().findIndex(u => u.socketId === user.socketId)
+  move(userSocketId: string, direction: string){
+    const index = this.getUsersInGame().findIndex(u => u.socketId === userSocketId)
 
     if(index !== -1){
       this.users[index].move(direction)
